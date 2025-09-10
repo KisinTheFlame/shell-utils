@@ -1,15 +1,32 @@
-cmd = src/bin
-build = target/release
+cmd = cmd
+build = bin
 dest = /usr/local/bin
-commands = $(patsubst $(cmd)/%.rs, $(cmd)/% ,$(wildcard $(cmd)/*))
-targets = $(patsubst $(cmd)/%, $(build)/%, $(commands))
-dists = $(patsubst $(cmd)/%, $(dest)/%, $(commands))
+commands = now kreme kuso work_work
+targets = $(patsubst %, $(build)/%, $(commands))
+dists = $(patsubst %, $(dest)/%, $(commands))
 
 all: build
 
-build:
-	cargo +nightly fmt
-	cargo build --release
+build: $(targets)
+
+$(build)/now: cmd/now/main.go go.mod go.sum
+	@mkdir -p $(build)
+	go build -o $@ ./cmd/now
+
+$(build)/kreme: cmd/kreme/main.go go.mod go.sum
+	@mkdir -p $(build)
+	go build -o $@ ./cmd/kreme
+
+$(build)/kuso: cmd/kuso/main.go go.mod go.sum
+	@mkdir -p $(build)
+	go build -o $@ ./cmd/kuso
+
+$(build)/work_work: cmd/work_work/main.go go.mod go.sum
+	@mkdir -p $(build)
+	go build -o $@ ./cmd/work_work
+
+go.sum: go.mod
+	go mod tidy
 
 install: build $(dists)
 
@@ -18,4 +35,4 @@ $(dest)/%: $(build)/%
 
 .PHONY: clean
 clean:
-	cargo clean
+	rm -rf $(build)
