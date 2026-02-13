@@ -18,14 +18,14 @@ func main() {
 func execute() error {
 	scanner := bufio.NewScanner(os.Stdin)
 	var lines []string
-	
+
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line != "" && !isAllWhitespace(line) {
 			lines = append(lines, line)
 		}
 	}
-	
+
 	if err := scanner.Err(); err != nil {
 		return fmt.Errorf("failed to read stdin: %v", err)
 	}

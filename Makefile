@@ -1,7 +1,7 @@
 cmd = cmd
 build = bin
-dest = /usr/local/bin
-commands = now kreme kuso work_work
+dest = ~/.local/bin
+commands = health_server kreme kuso now work_work
 targets = $(patsubst %, $(build)/%, $(commands))
 dists = $(patsubst %, $(dest)/%, $(commands))
 
@@ -9,9 +9,9 @@ all: build
 
 build: $(targets)
 
-$(build)/now: cmd/now/main.go go.mod go.sum
+$(build)/health_server: cmd/health_server/main.go go.mod go.sum
 	@mkdir -p $(build)
-	go build -o $@ ./cmd/now
+	go build -o $@ ./cmd/health_server
 
 $(build)/kreme: cmd/kreme/main.go go.mod go.sum
 	@mkdir -p $(build)
@@ -20,6 +20,10 @@ $(build)/kreme: cmd/kreme/main.go go.mod go.sum
 $(build)/kuso: cmd/kuso/main.go go.mod go.sum
 	@mkdir -p $(build)
 	go build -o $@ ./cmd/kuso
+
+$(build)/now: cmd/now/main.go go.mod go.sum
+	@mkdir -p $(build)
+	go build -o $@ ./cmd/now
 
 $(build)/work_work: cmd/work_work/main.go go.mod go.sum
 	@mkdir -p $(build)
@@ -31,7 +35,7 @@ go.sum: go.mod
 install: build $(dists)
 
 $(dest)/%: $(build)/%
-	sudo cp $< $@
+	cp $< $@
 
 .PHONY: clean
 clean:
